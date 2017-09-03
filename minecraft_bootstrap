@@ -12,7 +12,7 @@ TRAVIS=$1
 # https://github.com/stephen-mw/vagrant_minecraft
 
 # Some default variables to get the ball started
-VERSION='https://s3.amazonaws.com/Minecraft.Download/versions/1.8/minecraft_server.1.8.jar'
+VERSION='https://s3.amazonaws.com/Minecraft.Download/versions/1.12.1/minecraft_server.1.12.1.jar'
 WORK_DIR='/opt/minecraft'
 
 # The only required package is openjdk-6
@@ -43,7 +43,7 @@ respawn
 
 chdir ${WORK_DIR}
 
-exec java -Xmx1024M -Xms1024M -jar minecraft_server.1.8.jar nogui > /opt/minecraft/logs/service.log 2>&1
+exec java -Xmx1024M -Xms2048M -jar minecraft_server.1.8.jar nogui > /opt/minecraft/logs/service.log 2>&1
 MINECRAFT_CONF
 
 # A logrotate script to keep the minecraft server log from getting too large
