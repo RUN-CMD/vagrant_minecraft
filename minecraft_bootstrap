@@ -13,17 +13,20 @@ TRAVIS=$1
 
 # Some default variables to get the ball started
 VERSION='https://s3.amazonaws.com/Minecraft.Download/versions/1.12.1/minecraft_server.1.12.1.jar'
-WORK_DIR='/opt/minecraft'
+#WORK_DIR='/opt/minecraft'
+WORK_DIR='/vagrant/persistent_files'
 
 # The only required package is openjdk-6
 export DEBIAN_FRONTEND=noninteractive
 apt-get update -y
-apt-get install -y --no-install-recommends openjdk-6-jre-headless
+apt-get install -y --no-install-recommends default-jre-headless upstart upstart-sysv
+
+sudo update-initramfs -u
 
 # We want to save persistent files, so we'll symlink over that directory
-if [[ -z "${TRAVIS}" ]]; then
-  ln -s /vagrant/persistent_files ${WORK_DIR}
-fi
+#if [[ -z "${TRAVIS}" ]]; then
+#  ln -s /vagrant/persistent_files ${WORK_DIR}
+#fi
 
 test -d ${WORK_DIR}/logs || mkdir -p ${WORK_DIR}/logs
 pushd ${WORK_DIR}
@@ -43,7 +46,7 @@ respawn
 
 chdir ${WORK_DIR}
 
-exec java -Xmx1024M -Xms2048M -jar minecraft_server.1.8.jar nogui > /opt/minecraft/logs/service.log 2>&1
+exec java -Xms1024M -Xmx2048M -jar /vagrant/persistent_files/minecraft_server.1.12.1.jar nogui > /vagrant/persistent_files/logs/service.log 2>&1
 MINECRAFT_CONF
 
 # A logrotate script to keep the minecraft server log from getting too large
@@ -68,7 +71,7 @@ service minecraft start
 
 # Delete the useless vagrant MOTD and install our own
 test -f /etc/motd.tail && rm /etc/motd.tail
-test -f /etc/update-motd.d/* && rm -r -- /etc/update-motd.d/*
+test -f /etc/update-motd.d/ && rm -r -- /etc/update-motd.d/*
 cat > /etc/update-motd.d/00-header <<'DONE'
 #!/bin/bash
 
@@ -83,7 +86,7 @@ process, simply run:${RESET}
 ${GREEN}
   $ service minecraft <stop|start|restart|status>${RESET}
 ${LBLUE}
-The runtime logs are available at /opt/minecraft/logs
+The runtime logs are available at /vagrant/persistent_files/logs
 
 To change the min or max server memory values, make the change in:${RESET}
 ${GREEN}
