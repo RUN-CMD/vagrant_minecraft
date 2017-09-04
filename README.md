@@ -1,5 +1,13 @@
 [![Build Status](https://travis-ci.org/stephen-mw/vagrant_minecraft.svg?branch=master)](https://travis-ci.org/stephen-mw/vagrant_minecraft)
 
+1. Download and install [Virtualbox](https://www.virtualbox.org/wiki/Downloads)
+2. Download and install [Vagrant](https://www.vagrantup.com/downloads.html)
+3. Clone this repo
+4. In the repo working dir:
+```
+vagrant up ; vagrant reload && vagrant provision
+```
+
 # Disposable Minecraft Servers
 Minecraft is a game where you run around punching blocks and building stuff with your imagination, basically like legos for boys and girls born in the 21st century.
 
