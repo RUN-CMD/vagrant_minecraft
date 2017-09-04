@@ -1,5 +1,7 @@
 [![Build Status](https://travis-ci.org/stephen-mw/vagrant_minecraft.svg?branch=master)](https://travis-ci.org/stephen-mw/vagrant_minecraft)
 
+# First-time Setup
+
 1. Download and install [Virtualbox](https://www.virtualbox.org/wiki/Downloads)
 2. Download and install [Vagrant](https://www.vagrantup.com/downloads.html)
 3. Clone this repo
