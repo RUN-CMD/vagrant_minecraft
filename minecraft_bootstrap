@@ -13,6 +13,8 @@ TRAVIS=$1
 
 # Some default variables to get the ball started
 VERSION='https://s3.amazonaws.com/Minecraft.Download/versions/1.12.1/minecraft_server.1.12.1.jar'
+FORGE_VERSION='forge-1.12.1-14.22.0.2474-universal.jar'
+FORGE_INSTALLER_VERSION='forge-1.12.1-14.22.0.2474-installer.jar'
 #WORK_DIR='/opt/minecraft'
 WORK_DIR='/vagrant/persistent_files'
 
@@ -35,6 +37,25 @@ pushd ${WORK_DIR}
 HEADER='Referer: https://github.com/stephendotexe/vagrant_minecraft_auto_launch'
 test -f "${VERSION}" || wget --header=${HEADER} --quiet "${VERSION}"
 
+# Check for forge installer jar locally
+# test -d ${WORK_DIR}/forge-installer || mkdir -p ${WORK_DIR}/forge-installer
+
+# TODO Download the forge jar if it doesn't already exist
+# https://files.minecraftforge.net/maven/net/minecraftforge/forge/1.12.1-14.22.0.2474/forge-1.12.1-14.22.0.2474-installer.jar
+test -f "${FORGE_INSTALLER_VERSION}" # || wget --header=${HEADER} --quiet "${VERSION}"
+
+# Launch forge installer
+java -jar "${FORGE_INSTALLER_VERSION}" --installServer nogui
+
+# Check for forge jar locally
+# test -d ${WORK_DIR}/forge || mkdir -p ${WORK_DIR}/forge
+
+# TODO Download the forge jar if it doesn't already exist
+test -f "${FORGE_VERSION}" # || wget --header=${HEADER} --quiet "${VERSION}"
+
+# Launch forge
+java -jar "${FORGE_VERSION}" -Xmx1024M nogui
+
 # Upstart manages the server process
 cat > /etc/init/minecraft.conf <<MINECRAFT_CONF
 # Minecraft upstart script
@@ -46,7 +67,7 @@ respawn
 
 chdir ${WORK_DIR}
 
-exec java -Xms1024M -Xmx2048M -jar /vagrant/persistent_files/minecraft_server.1.12.1.jar nogui > /vagrant/persistent_files/logs/service.log 2>&1
+exec java -Xms1024M -Xmx1024M -jar /vagrant/persistent_files/minecraft_server.1.12.1.jar nogui > /vagrant/persistent_files/logs/service.log 2>&1
 MINECRAFT_CONF
 
 # A logrotate script to keep the minecraft server log from getting too large

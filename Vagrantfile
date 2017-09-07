@@ -17,6 +17,12 @@ Vagrant.configure("2") do |config|
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://vagrantcloud.com/search.
   config.vm.box = "ubuntu/xenial64"
+
+	# Custom box name
+	config.vm.provider :virtualbox do |vb|
+			vb.name = "minecraft-server"
+	end
+
   config.vm.provision :shell, :path => "minecraft_bootstrap"
 
   # Disable automatic box update checking. If you disable this, then
@@ -47,7 +53,7 @@ Vagrant.configure("2") do |config|
   
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
-  # config.vm.network "private_network", ip: "192.168.33.10"
+  config.vm.network "private_network", ip: "192.168.33.10"
 
   #config.vm.network "public_network", :bridge => "en0: Wi-Fi (AirPort)"
   
